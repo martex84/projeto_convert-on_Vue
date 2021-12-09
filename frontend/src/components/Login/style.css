@@ -1,0 +1,41 @@
+.container-login {
+    min-width: 100vh;
+    height: 100%;
+}
+
+.modalOn {
+    place-items: center;
+}
+
+.container-modalContent-login {
+    background-color: #68CFDE !important;
+}
+
+.borderTransparent {
+    border-width: 0 !important;
+}
+
+.login_identificador-tipo-input {
+    color: #0F6195;
+}
+
+.login_identificador-tipo-input>span {
+    display: none;
+
+    color: #8B0000;
+}
+
+.input-login {
+    padding-left: 5px;
+
+    background-color: #37AFC8;
+}
+
+.input-login::placeholder {
+    color: #fff;
+}
+
+.login_botao {
+    background-color: #0F6195 !important;
+    color: #fff !important;
+}
