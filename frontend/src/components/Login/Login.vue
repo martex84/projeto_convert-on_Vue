@@ -1,6 +1,6 @@
 <template>
   <div class="container-login">
-    <div class="modal modalOn" tabindex="-1" v-bind:style="{ display: style.container.display}">
+    <div class="modal modalOn" tabindex="-1" v-bind:style="{ display:propsContainer}">
       <div class="modal-dialog">
         <div class="modal-content container-modalContent-login">
           <div class="modal-header borderTransparent">
@@ -46,12 +46,13 @@
 <script>
 export default {
   name: "Login",
+  props: {
+    nomeLocalStorage: String,
+    propsContainer: String
+  },
   data() {
     return {
       style: {
-        container: {
-          display: "grid"
-        },
         span: {
           displayLogin: "none",
           displaySenha: "none"
@@ -91,7 +92,22 @@ export default {
         }
 
         if (presencaModeloLogin === true && contagemModeloLogin === 1) {
-          alert("Conectado");
+          let valorLocalStorage = JSON.parse(
+            localStorage.getItem(this.nomeLocalStorage)
+          );
+
+          let { token } = valorLocalStorage;
+
+          if (token === "") {
+            valorLocalStorage.token = "Salvo";
+          }
+
+          console.log(valorLocalStorage);
+
+          localStorage.setItem(
+            this.nomeLocalStorage,
+            JSON.stringify(valorLocalStorage)
+          );
         }
       }
     }
