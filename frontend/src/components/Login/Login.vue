@@ -1,6 +1,6 @@
 <template>
   <div class="container-login">
-    <div class="modal modalOn" tabindex="-1" v-bind:style="{ display: valorDiplayLogin.display}">
+    <div class="modal modalOn" tabindex="-1" v-bind:style="{ display:propsContainer}">
       <div class="modal-dialog">
         <div class="modal-content container-modalContent-login">
           <div class="modal-header borderTransparent">
@@ -9,17 +9,18 @@
           <div class="modal-body">
             <div class="d-flex justify-content-between login_identificador-tipo-input">
               <label>Login</label>
-              <span>Incluir!</span>
+              <span v-bind:style="{display:style.span.displayLogin}">Incluir!</span>
             </div>
             <input
               class="input-login borderTransparent"
-              type="text"
+              type="email"
+              pattern=".+@.+\.com"
               placeholder="Insira seu email"
               v-model="input.valorLogin"
             />
             <div class="d-flex justify-content-between mt-4 login_identificador-tipo-input">
               <label>Senha</label>
-              <span>Incluir!</span>
+              <span v-bind:style="{display:style.span.displaySenha}">Incluir!</span>
             </div>
             <input
               class="input-login borderTransparent"
@@ -33,7 +34,7 @@
               type="buttom"
               class="btn login_botao"
               style="margin: auto"
-              v-on:click="console"
+              @click="verificarLogin"
             >Conectar</button>
           </div>
         </div>
@@ -45,10 +46,17 @@
 <script>
 export default {
   name: "Login",
+  props: {
+    nomeLocalStorage: String,
+    propsContainer: String
+  },
   data() {
     return {
-      valorDiplayLogin: {
-        display: "grid"
+      style: {
+        span: {
+          displayLogin: "none",
+          displaySenha: "none"
+        }
       },
       input: {
         valorLogin: "",
@@ -57,15 +65,51 @@ export default {
     };
   },
   methods: {
-    console() {
-      /* this.consoleLog(this.input.valorLogin); */
+    verificarLogin() {
+      this.style.span.displayLogin = "none";
+      this.style.span.displaySenha = "none";
 
-      (() => {
-        console.log(this.input.valorLogin);
-      })();
-    },
-    consoleLog: valor => {
-      console.log(valor);
+      if (this.input.valorLogin === "") {
+        this.style.span.displayLogin = "inline";
+        return;
+      }
+
+      if (this.input.valorSenha === "") {
+        this.style.span.displaySenha = "inline";
+        return;
+      }
+
+      if (this.input.valorLogin !== "" && this.input.valorSenha !== "") {
+        let presencaModeloLogin = false;
+        let contagemModeloLogin = 0;
+
+        for (let valor of this.input.valorLogin) {
+          if (valor === "@") {
+            presencaModeloLogin = true;
+
+            contagemModeloLogin += 1;
+          }
+        }
+
+        if (presencaModeloLogin === true && contagemModeloLogin === 1) {
+          let valorLocalStorage = JSON.parse(
+            localStorage.getItem(this.nomeLocalStorage)
+          );
+
+          let { token } = valorLocalStorage;
+
+          if (token === "") {
+            valorLocalStorage.token = "Salvo";
+          }
+
+          console.log(valorLocalStorage);
+
+          localStorage.setItem(
+            this.nomeLocalStorage,
+            JSON.stringify(valorLocalStorage)
+          );
+        }
+      }
     }
   }
 };
