@@ -36,9 +36,9 @@ async function getFindToken(req) {
         }
     })
 
-    if (verificaLogin === undefined) return false;
+    if (verificaLogin === undefined) return { tokenVerification: false };
 
-    return true
+    return { tokenVerification: true }
 }
 
 async function createAdmUser() {

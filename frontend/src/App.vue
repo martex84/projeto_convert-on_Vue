@@ -22,8 +22,6 @@ if (!localStorage.getItem(nomeLocalStorage)) {
 } else {
   let valorLocalStorage = JSON.parse(localStorage.getItem(nomeLocalStorage));
 
-  console.log(valorLocalStorage);
-
   const { token } = valorLocalStorage;
 
   if (token !== "") {
