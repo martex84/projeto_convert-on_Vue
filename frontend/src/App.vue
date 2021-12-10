@@ -6,6 +6,7 @@
 
 <script>
 import Login from "./components/Login/Login.vue";
+import { apiBanco } from "./services/api.js";
 
 let nomeLocalStorage = "convert-on";
 let propsContainer = "grid";
@@ -24,10 +25,29 @@ if (!localStorage.getItem(nomeLocalStorage)) {
 
   const { token } = valorLocalStorage;
 
-  if (token !== "") {
-    alert("Conectado");
-    propsContainer = "none";
-  }
+  (async () => {
+    const resultadoPesquisa = await apiBanco
+      .get(`/token?token=${token}`)
+      .then(res => {
+        return res.data;
+      })
+      .catch(err => console.log(err));
+
+    if (resultadoPesquisa === true) {
+      alert("Bem Vindo!");
+      propsContainer = "none";
+    }
+    //Caso o token esteja errado irá zerar os valores do LocalStorage
+    else {
+      localStorage.setItem(
+        nomeLocalStorage,
+        JSON.stringify({
+          token: "",
+          tabela: ""
+        })
+      );
+    }
+  })();
 }
 
 export default {
