@@ -1,9 +1,9 @@
 import * as usersService from '../services/usersServices.js'
 
-async function returnGet(req, res) {
+async function returnGetUser(req, res) {
     return new Promise((resolve, reject) => {
         resolve(
-            usersService.getFindOne(req)
+            usersService.getFindUser(req)
         );
     }).then((resolve) => {
         const { token } = resolve;
@@ -12,6 +12,17 @@ async function returnGet(req, res) {
     })
 }
 
+async function returnGetToken(req, res) {
+    return new Promise((resolve, reject) => {
+        resolve(
+            usersService.getFindToken(req)
+        );
+    }).then((resolve) => {
+        return res.json(resolve);
+    })
+}
+
 export {
-    returnGet
+    returnGetUser,
+    returnGetToken
 }

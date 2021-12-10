@@ -1,6 +1,8 @@
+import JsonWebToken from 'jsonwebtoken';
+
 import users from '../model/userModel.js';
 
-async function getFindOne(req) {
+async function getFindUser(req) {
     const { login, senha } = req;
 
     const resultado = await users.findAll({
@@ -15,6 +17,30 @@ async function getFindOne(req) {
     return resultado[0].dataValues;
 }
 
+async function getFindToken(req) {
+    const { token } = req;
+
+    const resultado = await users.findOne({
+        where: {
+            token: token
+        }
+    })
+
+    if (resultado === undefined || resultado === null) return false;
+
+    const descriptografar = verifyToken(resultado.dataValues.token);
+
+    const verificaLogin = await users.findOne({
+        where: {
+            login: descriptografar
+        }
+    })
+
+    if (verificaLogin === undefined) return false;
+
+    return true
+}
+
 async function createAdmUser() {
     const resultadoPesquisa = await users.findOne({
         where: {
@@ -23,17 +49,33 @@ async function createAdmUser() {
         }
     }).catch((err) => console.error("\n", err, "\n"))
 
+    const token = createToken('admin');
+
     if (resultadoPesquisa === null) {
         const resultInclement = await users.create({
             login: 'admin',
             senha: 'admin',
-            token: 'token'
+            token: token
         });
     }
+}
 
+function createToken(login) {
+    const criptografia = JsonWebToken.sign({
+        foo: login
+    }, '07129533d4235a9ba3df3600152617d4');
+
+    return criptografia;
+}
+
+function verifyToken(token) {
+    const returnValor = JsonWebToken.verify(token, '07129533d4235a9ba3df3600152617d4').foo
+
+    return returnValor;
 }
 
 export {
     createAdmUser,
-    getFindOne
+    getFindUser,
+    getFindToken
 }
