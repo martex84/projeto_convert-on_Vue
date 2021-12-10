@@ -1,6 +1,8 @@
 import users from '../model/userModel.js';
 
-async function getFindOne(login, senha) {
+async function getFindOne(req) {
+    const { login, senha } = req;
+
     const resultado = await users.findAll({
         where: {
             login: login,
@@ -32,5 +34,6 @@ async function createAdmUser() {
 }
 
 export {
-    createAdmUser
+    createAdmUser,
+    getFindOne
 }
