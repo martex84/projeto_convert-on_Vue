@@ -1,8 +1,6 @@
 import { database } from '../database/index.js';
 import Sequelize from 'sequelize';
 
-const sequelize = new Sequelize('mysql::memory:')
-
 const Users = database.define(
     'users',
     {
@@ -27,7 +25,5 @@ const Users = database.define(
 
     }
 )
-
-console.log(Users === sequelize.models.Users);
 
 export default Users;
