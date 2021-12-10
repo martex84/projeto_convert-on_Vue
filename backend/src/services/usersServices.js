@@ -44,7 +44,7 @@ async function getFindToken(req) {
 async function createAdmUser() {
     const resultadoPesquisa = await users.findOne({
         where: {
-            login: 'admin',
+            login: 'admin@admin',
             senha: 'admin'
         }
     }).catch((err) => console.error("\n", err, "\n"))
@@ -53,7 +53,7 @@ async function createAdmUser() {
 
     if (resultadoPesquisa === null) {
         const resultInclement = await users.create({
-            login: 'admin',
+            login: 'admin@admin',
             senha: 'admin',
             token: token
         });
