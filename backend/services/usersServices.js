@@ -1,7 +1,7 @@
-import clientModel from '../model/userModel.js';
+import users from '../model/userModel.js';
 
 async function getFindOne(login, senha) {
-    const resultado = await clientModel.findAll({
+    const resultado = await users.findAll({
         where: {
             login: login,
             senha: senha

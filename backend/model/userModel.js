@@ -1,7 +1,7 @@
 import { database, sequelize } from '../database/index.js';
 
-const clientes = database.define(
-    'clientes',
+const users = database.define(
+    'users',
     {
         id: {
             type: sequelize.INTEGER,
@@ -25,4 +25,4 @@ const clientes = database.define(
     }
 )
 
-export default clientes;
+export default users;
