@@ -2,7 +2,7 @@ import JsonWebToken from 'jsonwebtoken';
 
 import users from '../model/userModel.js';
 
-async function getFindOne(req) {
+async function getFindUser(req) {
     const { login, senha } = req;
 
     const resultado = await users.findAll({
@@ -15,6 +15,30 @@ async function getFindOne(req) {
     if (resultado[0] === undefined) return undefined;
 
     return resultado[0].dataValues;
+}
+
+async function getFindToken(req) {
+    const { token } = req;
+
+    const resultado = await users.findOne({
+        where: {
+            token: token
+        }
+    })
+
+    if (resultado === undefined || resultado === null) return false;
+
+    const descriptografar = verifyToken(resultado.dataValues.token);
+
+    const verificaLogin = await users.findOne({
+        where: {
+            login: descriptografar
+        }
+    })
+
+    if (verificaLogin === undefined) return false;
+
+    return true
 }
 
 async function createAdmUser() {
@@ -52,5 +76,6 @@ function verifyToken(token) {
 
 export {
     createAdmUser,
-    getFindOne
+    getFindUser,
+    getFindToken
 }
