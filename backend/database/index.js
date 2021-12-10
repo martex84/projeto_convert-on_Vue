@@ -11,4 +11,9 @@ const database = new Sequelize(
     }
 );
 
-export default database;
+const sequelize = Sequelize;
+
+export {
+    database,
+    sequelize
+};
