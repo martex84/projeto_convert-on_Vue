@@ -18,7 +18,10 @@ async function returnGetToken(req, res) {
             usersService.getFindToken(req)
         );
     }).then((resolve) => {
+        console.log(resolve)
         return res.json(resolve);
+    }).catch((err) => {
+        return err.json(err);
     })
 }
 

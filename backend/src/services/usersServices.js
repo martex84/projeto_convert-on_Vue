@@ -26,7 +26,7 @@ async function getFindToken(req) {
         }
     })
 
-    if (resultado === undefined || resultado === null) return false;
+    if (resultado === undefined || resultado === null) return { tokenVerification: false };
 
     const descriptografar = verifyToken(resultado.dataValues.token);
 
