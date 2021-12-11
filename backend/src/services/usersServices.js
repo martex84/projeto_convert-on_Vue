@@ -12,7 +12,7 @@ async function getFindUser(req) {
         }
     });
 
-    if (resultado[0] === undefined) return undefined;
+    if (resultado[0] === undefined || resultado.length === 0) return { error: "404" };
 
     return resultado[0].dataValues;
 }

@@ -6,9 +6,7 @@ async function returnGetUser(req, res) {
             usersService.getFindUser(req)
         );
     }).then((resolve) => {
-        const { token } = resolve;
-
-        return res.json(token);
+        return res.json(resolve);
     })
 }
 
