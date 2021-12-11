@@ -1,20 +1,27 @@
 <template>
-  <div id="app">
-    <Login :nomeLocalStorage="nomeLocalStorage" :propsContainer="propsContainer" />
+  <div id="app" class="d-flex justify-content-center align-items-center">
+    <!-- <Login
+      :nomeLocalStorage="nomeLocalStorage"
+      :propsContainer="propsContainer"
+      style="width:0; height:0"
+    />-->
+    <Table :nomeLocalStorage="nomeLocalStorage" />
   </div>
 </template>
 
 <script>
-import Login from "./components/Login/Login.vue";
+/* import Login from "./components/Login/Login.vue"; */
+import Table from "./components/Table/Table.vue";
 import { apiBanco } from "./services/api.js";
-import criarLocalStorage from "./services/criarLocalStorage.js";
+import { verificarLocalStorage } from "./services/funcoesLocalStorage.js";
 
 let nomeLocalStorage = "convert-on";
 
 export default {
   name: "App",
   components: {
-    Login
+    /* Login, */
+    Table
   },
   data() {
     return {
@@ -25,44 +32,42 @@ export default {
   beforeMount() {
     //Cria local storage caso não tenha
     (() => {
-      if (!localStorage.getItem(nomeLocalStorage)) {
-        criarLocalStorage(nomeLocalStorage);
-      } else {
-        let valorLocalStorage = JSON.parse(
-          localStorage.getItem(nomeLocalStorage)
-        );
+      verificarLocalStorage(nomeLocalStorage);
 
-        const { token } = valorLocalStorage;
+      let valorLocalStorage = JSON.parse(
+        localStorage.getItem(nomeLocalStorage)
+      );
 
-        (async () => {
-          const resultadoPesquisa = await apiBanco
-            .get(`/token?token=${token}`)
-            .then(res => {
-              return res.data;
+      const { token } = valorLocalStorage;
+
+      (async () => {
+        const resultadoPesquisa = await apiBanco
+          .get(`/token?token=${token}`)
+          .then(res => {
+            return res.data;
+          })
+          .catch(err => console.log(err));
+
+        console.log(resultadoPesquisa);
+
+        if (resultadoPesquisa.tokenVerification === true) {
+          /* alert("Bem Vindo!"); */
+          if (this.propsContainer !== "none") {
+            this.propsContainer = "none";
+          }
+        }
+        //Caso o token esteja errado irá zerar os valores do LocalStorage
+        else {
+          this.propsContainer = "grid";
+          localStorage.setItem(
+            nomeLocalStorage,
+            JSON.stringify({
+              token: "",
+              tabela: ""
             })
-            .catch(err => console.log(err));
-
-          console.log(resultadoPesquisa);
-
-          if (resultadoPesquisa.tokenVerification === true) {
-            alert("Bem Vindo!");
-            if (this.propsContainer !== "none") {
-              this.propsContainer = "none";
-            }
-          }
-          //Caso o token esteja errado irá zerar os valores do LocalStorage
-          else {
-            this.propsContainer = "grid";
-            localStorage.setItem(
-              nomeLocalStorage,
-              JSON.stringify({
-                token: "",
-                tabela: ""
-              })
-            );
-          }
-        })();
-      }
+          );
+        }
+      })();
     })();
     return {};
   }
@@ -70,6 +75,10 @@ export default {
 </script>
 
 <style>
+html {
+  background-color: #a9e3ea;
+}
+
 body {
   height: 100vh;
 }
@@ -80,8 +89,7 @@ body {
 }
 
 #app {
-  height: 100vh;
-
+  min-height: 100vh;
   background-color: #a9e3ea;
 }
 </style>

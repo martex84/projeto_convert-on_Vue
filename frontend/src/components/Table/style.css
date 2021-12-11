@@ -1,0 +1,32 @@
+.containerTable {
+    height: 100%;
+    place-items: center;
+    display: grid !important;
+}
+
+.containerConteudo__containerConverter,
+.containerConteudo__containerTabela {
+    width: 450px;
+    height: 410px;
+    padding: 40px;
+
+    background-color: #37AFC8;
+}
+
+.containerConverter__informacaoInput {
+    margin-bottom: 0px;
+}
+
+.containerConverter__informacaoInput label {
+    color: #0F6195;
+}
+
+.containerConverter__button {
+    border-radius: 15px !important;
+
+    background-color: #0F6195 !important;
+}
+
+.containerTabela__titulo--cor {
+    color: #fff;
+}
