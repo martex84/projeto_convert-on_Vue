@@ -1,16 +1,16 @@
 <template>
-  <div id="app">
-    <Login
+  <div id="app" class="d-flex justify-content-center align-items-center">
+    <!-- <Login
       :nomeLocalStorage="nomeLocalStorage"
       :propsContainer="propsContainer"
       style="width:0; height:0"
-    />
+    />-->
     <Table />
   </div>
 </template>
 
 <script>
-import Login from "./components/Login/Login.vue";
+/* import Login from "./components/Login/Login.vue"; */
 import Table from "./components/Table/Table.vue";
 import { apiBanco } from "./services/api.js";
 import criarLocalStorage from "./services/criarLocalStorage.js";
@@ -20,7 +20,7 @@ let nomeLocalStorage = "convert-on";
 export default {
   name: "App",
   components: {
-    Login,
+    /* Login, */
     Table
   },
   data() {
@@ -77,6 +77,10 @@ export default {
 </script>
 
 <style>
+html {
+  background-color: #a9e3ea;
+}
+
 body {
   height: 100vh;
 }
@@ -87,8 +91,7 @@ body {
 }
 
 #app {
-  height: 100vh;
-
+  min-height: 100vh;
   background-color: #a9e3ea;
 }
 </style>
