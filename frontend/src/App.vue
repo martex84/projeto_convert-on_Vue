@@ -1,11 +1,17 @@
 <template>
   <div id="app">
-    <Login :nomeLocalStorage="nomeLocalStorage" :propsContainer="propsContainer" />
+    <Login
+      :nomeLocalStorage="nomeLocalStorage"
+      :propsContainer="propsContainer"
+      style="width:0; height:0"
+    />
+    <Table />
   </div>
 </template>
 
 <script>
 import Login from "./components/Login/Login.vue";
+import Table from "./components/Table/Table.vue";
 import { apiBanco } from "./services/api.js";
 import criarLocalStorage from "./services/criarLocalStorage.js";
 
@@ -14,7 +20,8 @@ let nomeLocalStorage = "convert-on";
 export default {
   name: "App",
   components: {
-    Login
+    Login,
+    Table
   },
   data() {
     return {
@@ -45,7 +52,7 @@ export default {
           console.log(resultadoPesquisa);
 
           if (resultadoPesquisa.tokenVerification === true) {
-            alert("Bem Vindo!");
+            /* alert("Bem Vindo!"); */
             if (this.propsContainer !== "none") {
               this.propsContainer = "none";
             }

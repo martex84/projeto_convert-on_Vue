@@ -1,0 +1,19 @@
+.containerTable {
+    height: 100vh;
+    place-items: center;
+    display: grid !important;
+}
+
+.containerConverter__informacaoInput {
+    margin-bottom: 0px;
+}
+
+.containerConverter__informacaoInput label {
+    color: #0F6195;
+}
+
+.containerConverter__button {
+    border-radius: 15px !important;
+
+    background-color: #0F6195 !important;
+}
