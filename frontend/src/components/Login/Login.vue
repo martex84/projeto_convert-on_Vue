@@ -45,7 +45,7 @@
 
 <script>
 import { apiBanco } from "../../services/api.js";
-import criarLocalStorage from "../../services/criarLocalStorage.js";
+import criarLocalStorage from "../../services/funcoesLocalStorage.js";
 
 export default {
   name: "Login",

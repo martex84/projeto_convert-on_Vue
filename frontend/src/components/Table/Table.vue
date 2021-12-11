@@ -20,20 +20,33 @@
         </div>
         <div class="input-group mb-4">
           <span class="input-group-text">$</span>
-          <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)" />
+          <input
+            type="text"
+            class="form-control"
+            aria-label="Amount (to the nearest dollar)"
+            v-model="valueInput.inicial"
+          />
           <span class="input-group-text">.00</span>
         </div>
         <div class="containerConverter__informacaoInput d-flex justify-content-between w-100">
           <label>Tipo de conversão</label>
           <span>Incluir!</span>
         </div>
-        <select class="form-select mb-4" aria-label="Default select example">
+        <select
+          class="form-select mb-4"
+          aria-label="Default select example"
+          v-model="valueInput.type"
+        >
           <option selected>Converter De/Para</option>
           <option value="1">One</option>
           <option value="2">Two</option>
           <option value="3">Three</option>
         </select>
-        <button type="button" class="containerConverter__button btn mb-4">Converter</button>
+        <button
+          type="button"
+          class="containerConverter__button btn mb-4"
+          @click="converterValores"
+        >Converter</button>
         <div class="input-group mb-3">
           <span class="input-group-text" id="inputGroup-sizing-default">Resultado</span>
           <input
@@ -41,6 +54,7 @@
             class="form-control"
             aria-label="Sizing example input"
             aria-describedby="inputGroup-sizing-default"
+            v-model="valueInput.final"
           />
         </div>
       </div>
@@ -117,13 +131,85 @@
 </template>
 
 <script>
+import { verificarLocalStorage } from "../../services/funcoesLocalStorage.js";
+
 export default {
   name: "Table",
-  props: {},
-  data() {
-    return {};
+  props: {
+    nomeLocalStorage: String
   },
-  methods: {}
+  data() {
+    return {
+      valueInput: {
+        inicial: "",
+        type: "",
+        final: ""
+      }
+    };
+  },
+  methods: {
+    converterValores() {
+      (async () => {
+        const horaAtual = new Date().getHours();
+
+        verificarLocalStorage(this.nomeLocalStorage);
+
+        let valorLocalStorage = JSON.parse(
+          localStorage.getItem(this.nomeLocalStorage)
+        );
+
+        //Verificar se já se passou uma hora ou se o localStorage está
+        if (
+          valorLocalStorage.conversor === "" ||
+          valorLocalStorage.conversor.hours !== horaAtual
+        ) {
+          valorLocalStorage.conversor = {
+            hours: horaAtual,
+            dataBase: {
+              USD: "",
+              AUD: "",
+              CAD: "",
+              PLN: "",
+              MXN: ""
+            }
+          };
+
+          await fetch(
+            `http://api.exchangeratesapi.io/v1/latest?access_key=8b14f3253aa22050e84a0dfd5e2effb6& symbols=USD,AUD,CAD,PLN,MXN`
+          )
+            .then(res => res.json())
+            .then(json => {
+              const valorAPI = json;
+
+              //Inclementa o valor da API dentro do localStorage
+              Object.keys(valorLocalStorage.conversor.dataBase).forEach(
+                valorDataBase => {
+                  Object.keys(valorAPI.rates).forEach(valorLocalApi => {
+                    if (valorDataBase === valorLocalApi) {
+                      valorLocalStorage.conversor.dataBase[`${valorDataBase}`] =
+                        valorAPI.rates[`${valorLocalApi}`];
+                    }
+                  });
+                }
+              );
+
+              console.log(valorLocalStorage);
+
+              localStorage.setItem(
+                this.nomeLocalStorage,
+                JSON.stringify(valorLocalStorage)
+              );
+            });
+        } else {
+          console.log("Banco está atualizado!");
+        }
+
+        /*
+          
+        */
+      })();
+    }
+  }
 };
 </script>
 

@@ -5,7 +5,7 @@
       :propsContainer="propsContainer"
       style="width:0; height:0"
     />-->
-    <Table />
+    <Table :nomeLocalStorage="nomeLocalStorage" />
   </div>
 </template>
 
@@ -13,7 +13,7 @@
 /* import Login from "./components/Login/Login.vue"; */
 import Table from "./components/Table/Table.vue";
 import { apiBanco } from "./services/api.js";
-import criarLocalStorage from "./services/criarLocalStorage.js";
+import { verificarLocalStorage } from "./services/funcoesLocalStorage.js";
 
 let nomeLocalStorage = "convert-on";
 
@@ -32,44 +32,42 @@ export default {
   beforeMount() {
     //Cria local storage caso não tenha
     (() => {
-      if (!localStorage.getItem(nomeLocalStorage)) {
-        criarLocalStorage(nomeLocalStorage);
-      } else {
-        let valorLocalStorage = JSON.parse(
-          localStorage.getItem(nomeLocalStorage)
-        );
+      verificarLocalStorage(nomeLocalStorage);
 
-        const { token } = valorLocalStorage;
+      let valorLocalStorage = JSON.parse(
+        localStorage.getItem(nomeLocalStorage)
+      );
 
-        (async () => {
-          const resultadoPesquisa = await apiBanco
-            .get(`/token?token=${token}`)
-            .then(res => {
-              return res.data;
+      const { token } = valorLocalStorage;
+
+      (async () => {
+        const resultadoPesquisa = await apiBanco
+          .get(`/token?token=${token}`)
+          .then(res => {
+            return res.data;
+          })
+          .catch(err => console.log(err));
+
+        console.log(resultadoPesquisa);
+
+        if (resultadoPesquisa.tokenVerification === true) {
+          /* alert("Bem Vindo!"); */
+          if (this.propsContainer !== "none") {
+            this.propsContainer = "none";
+          }
+        }
+        //Caso o token esteja errado irá zerar os valores do LocalStorage
+        else {
+          this.propsContainer = "grid";
+          localStorage.setItem(
+            nomeLocalStorage,
+            JSON.stringify({
+              token: "",
+              tabela: ""
             })
-            .catch(err => console.log(err));
-
-          console.log(resultadoPesquisa);
-
-          if (resultadoPesquisa.tokenVerification === true) {
-            /* alert("Bem Vindo!"); */
-            if (this.propsContainer !== "none") {
-              this.propsContainer = "none";
-            }
-          }
-          //Caso o token esteja errado irá zerar os valores do LocalStorage
-          else {
-            this.propsContainer = "grid";
-            localStorage.setItem(
-              nomeLocalStorage,
-              JSON.stringify({
-                token: "",
-                tabela: ""
-              })
-            );
-          }
-        })();
-      }
+          );
+        }
+      })();
     })();
     return {};
   }
