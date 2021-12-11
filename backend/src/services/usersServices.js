@@ -12,7 +12,7 @@ async function getFindUser(req) {
         }
     });
 
-    if (resultado[0] === undefined) return undefined;
+    if (resultado[0] === undefined || resultado.length === 0) return { error: "404" };
 
     return resultado[0].dataValues;
 }
@@ -26,7 +26,7 @@ async function getFindToken(req) {
         }
     })
 
-    if (resultado === undefined || resultado === null) return false;
+    if (resultado === undefined || resultado === null) return { tokenVerification: false };
 
     const descriptografar = verifyToken(resultado.dataValues.token);
 
@@ -36,15 +36,15 @@ async function getFindToken(req) {
         }
     })
 
-    if (verificaLogin === undefined) return false;
+    if (verificaLogin === undefined) return { tokenVerification: false };
 
-    return true
+    return { tokenVerification: true }
 }
 
 async function createAdmUser() {
     const resultadoPesquisa = await users.findOne({
         where: {
-            login: 'admin',
+            login: 'admin@admin',
             senha: 'admin'
         }
     }).catch((err) => console.error("\n", err, "\n"))
@@ -53,7 +53,7 @@ async function createAdmUser() {
 
     if (resultadoPesquisa === null) {
         const resultInclement = await users.create({
-            login: 'admin',
+            login: 'admin@admin',
             senha: 'admin',
             token: token
         });
