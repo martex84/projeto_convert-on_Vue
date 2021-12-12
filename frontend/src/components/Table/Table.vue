@@ -250,19 +250,19 @@ export default {
           valorLocalStorage.conversor === "" ||
           valorLocalStorage.conversor.hours !== horaAtual
         ) {
-          let tiposParaConversão = ["BRL", "USD", "CAD"];
-          let keyAPI = "8b14f3253aa22050e84a0dfd5e2effb6";
+          /* let tiposParaConversão = ["BRL", "USD", "CAD"];
+          let keyAPI = "8b14f3253aa22050e84a0dfd5e2effb6"; */
 
           valorLocalStorage.conversor = {
             hours: horaAtual,
             dataBase: {
-              USD: "",
-              BRL: "",
-              CAD: ""
+              USD: "1.131676",
+              BRL: "6.351515",
+              CAD: "1.131676"
             }
           };
 
-          await fetch(
+          /* await fetch(
             `http://api.exchangeratesapi.io/v1/latest?access_key=${keyAPI}&symbols=${tiposParaConversão[0]},${tiposParaConversão[1]},${tiposParaConversão[2]}`
           )
             .then(res => res.json())
@@ -284,7 +284,7 @@ export default {
                 this.nomeLocalStorage,
                 JSON.stringify(valorLocalStorage)
               );
-            });
+            });*/
         }
 
         //Ira processar os valores e decidir qual a ordem correta
@@ -415,6 +415,13 @@ export default {
 
                       //Reseta os campos
                       this.valueInput.inicial = "";
+                    }
+
+                    if (
+                      indexGrupoPrincipal === 2 &&
+                      indexGrupoSecundario === 4
+                    ) {
+                      alert("O histórico está completo");
                     }
                   }
                 }
