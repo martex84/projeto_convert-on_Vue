@@ -6,7 +6,6 @@ async function returnGetUser(req, res) {
             usersService.getFindUser(req)
         );
     }).then((resolve) => {
-        console.log(resolve)
         return res.json(resolve);
     })
 }
