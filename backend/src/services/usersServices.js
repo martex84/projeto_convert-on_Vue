@@ -14,7 +14,11 @@ async function getFindUser(req) {
 
     if (resultado[0] === undefined || resultado.length === 0) return { error: "404" };
 
-    return resultado[0].dataValues;
+    const { token } = resultado[0].dataValues;
+
+    return {
+        token
+    };
 }
 
 async function getFindToken(req) {

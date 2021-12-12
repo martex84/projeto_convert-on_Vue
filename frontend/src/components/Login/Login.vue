@@ -1,6 +1,6 @@
 <template>
-  <div class="containerLogin position-absolute">
-    <div class="modal modalOn" tabindex="-1" v-bind:style="{ display:propsContainer}">
+  <div class="containerLogin position-absolute" v-bind:style="{display:propsContainer}">
+    <div class="modal modalOn" tabindex="-1" style="display:grid">
       <div class="modal-dialog">
         <div class="modal-content container-modalContent-login">
           <div class="modal-header borderTransparent">
@@ -45,7 +45,7 @@
 
 <script>
 import { apiBanco } from "../../services/api.js";
-import criarLocalStorage from "../../services/funcoesLocalStorage.js";
+import { criarLocalStorage } from "../../services/funcoesLocalStorage.js";
 
 export default {
   name: "Login",
@@ -103,9 +103,9 @@ export default {
           if (
             localStoragePresente === true &&
             localStorage.getItem(this.nomeLocalStorage).token
-          )
+          ) {
             localStoragePresente = true;
-          else localStoragePresente = false;
+          } else localStoragePresente = false;
 
           //Cria o local storage caso tenha algume erro
           if (localStoragePresente === false) {
@@ -135,6 +135,8 @@ export default {
                 this.nomeLocalStorage,
                 JSON.stringify(valorLocalStorage)
               );
+
+              this.propsContainer = "none";
             }
           })();
         }
