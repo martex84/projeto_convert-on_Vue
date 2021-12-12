@@ -38,9 +38,12 @@
           v-model="valueInput.type"
         >
           <option selected>Converter De/Para</option>
-          <option value="1">One</option>
-          <option value="2">Two</option>
-          <option value="3">Three</option>
+          <option value="1">BRL > USD</option>
+          <option value="2">USD > BRL</option>
+          <option value="3">BRL > CAD</option>
+          <option value="4">CAD > BRL</option>
+          <option value="5">CAD > USD</option>
+          <option value="6">USD > CAD</option>
         </select>
         <button
           type="button"
@@ -72,9 +75,9 @@
           <tbody>
             <tr>
               <th scope="row">1</th>
-              <td>15</td>
-              <td>30</td>
-              <td>Br>Dolar</td>
+              <td>{{this.valueTable.matrix[0][0][0]}}</td>
+              <td>{{this.valueTable.matrix[0][0][1]}}</td>
+              <td>{{this.valueTable.matrix[0][0][2]}}</td>
             </tr>
             <tr>
               <th scope="row">2</th>
@@ -132,6 +135,10 @@
 
 <script>
 import { verificarLocalStorage } from "../../services/funcoesLocalStorage.js";
+import {
+  catalogoBaseConversaoMoedas,
+  verificacaoAutomaticaDaConversao
+} from "../../services/processosMatematicos.js";
 
 export default {
   name: "Table",
@@ -144,6 +151,18 @@ export default {
         inicial: "",
         type: "",
         final: ""
+      },
+      valueTable: {
+        pages: "1",
+        matrix: [
+          [
+            [0, 0, 0],
+            [0, 0, 0],
+            [0, 0, 0],
+            [0, 0, 0],
+            [0, 0, 0]
+          ]
+        ]
       }
     };
   },
@@ -151,6 +170,16 @@ export default {
     converterValores() {
       (async () => {
         const horaAtual = new Date().getHours();
+        const { inicial, type } = this.valueInput;
+        let tipoValores = {
+          initial: "",
+          final: "",
+          processoConversao: {
+            USD_BRL: "",
+            USD_CAD: "",
+            CAD_BRL: ""
+          }
+        };
 
         verificarLocalStorage(this.nomeLocalStorage);
 
@@ -163,51 +192,122 @@ export default {
           valorLocalStorage.conversor === "" ||
           valorLocalStorage.conversor.hours !== horaAtual
         ) {
+          let tiposParaConversão = ["BRL", "USD", "CAD"];
+          let keyAPI = "8b14f3253aa22050e84a0dfd5e2effb6";
+
           valorLocalStorage.conversor = {
             hours: horaAtual,
             dataBase: {
               USD: "",
-              AUD: "",
-              CAD: "",
-              PLN: "",
-              MXN: ""
+              BRL: "",
+              CAD: ""
             }
           };
 
           await fetch(
-            `http://api.exchangeratesapi.io/v1/latest?access_key=8b14f3253aa22050e84a0dfd5e2effb6& symbols=USD,AUD,CAD,PLN,MXN`
+            `http://api.exchangeratesapi.io/v1/latest?access_key=${keyAPI}&symbols=${tiposParaConversão[0]},${tiposParaConversão[1]},${tiposParaConversão[2]}`
           )
             .then(res => res.json())
             .then(json => {
-              const valorAPI = json;
+              const { rates } = json;
+              const { dataBase } = valorLocalStorage.conversor;
 
               //Inclementa o valor da API dentro do localStorage
-              Object.keys(valorLocalStorage.conversor.dataBase).forEach(
-                valorDataBase => {
-                  Object.keys(valorAPI.rates).forEach(valorLocalApi => {
-                    if (valorDataBase === valorLocalApi) {
-                      valorLocalStorage.conversor.dataBase[`${valorDataBase}`] =
-                        valorAPI.rates[`${valorLocalApi}`];
-                    }
-                  });
-                }
-              );
-
-              console.log(valorLocalStorage);
+              Object.keys(dataBase).forEach(valorDataBase => {
+                Object.keys(rates).forEach(valorLocalApi => {
+                  if (valorDataBase === valorLocalApi) {
+                    //Salva o valor da Api no respectivo campo da database
+                    dataBase[`${valorDataBase}`] = rates[`${valorLocalApi}`];
+                  }
+                });
+              });
 
               localStorage.setItem(
                 this.nomeLocalStorage,
                 JSON.stringify(valorLocalStorage)
               );
             });
-        } else {
-          console.log("Banco está atualizado!");
         }
 
-        /*
-          
-        */
+        //Ira processar os valores e decidir qual a ordem correta
+        tipoValores.processoConversao = catalogoBaseConversaoMoedas(
+          tipoValores.processoConversao,
+          this.nomeLocalStorage
+        );
+
+        //Verificar o tipo de conversão
+        switch (type) {
+          case "1":
+            tipoValores.initial = "BRL";
+            tipoValores.final = "USD";
+            this.valueInput.final = verificacaoAutomaticaDaConversao(
+              this.nomeLocalStorage,
+              tipoValores.processoConversao,
+              inicial,
+              tipoValores.initial,
+              tipoValores.final
+            );
+            break;
+          case "2":
+            tipoValores.initial = "USD";
+            tipoValores.final = "BRL";
+            this.valueInput.final = verificacaoAutomaticaDaConversao(
+              this.nomeLocalStorage,
+              tipoValores.processoConversao,
+              inicial,
+              tipoValores.initial,
+              tipoValores.final
+            );
+            break;
+          case "3":
+            tipoValores.initial = "BRL";
+            tipoValores.final = "CAD";
+            this.valueInput.final = verificacaoAutomaticaDaConversao(
+              this.nomeLocalStorage,
+              tipoValores.processoConversao,
+              inicial,
+              tipoValores.initial,
+              tipoValores.final
+            );
+            break;
+          case "4":
+            tipoValores.initial = "CAD";
+            tipoValores.final = "BRL";
+            this.valueInput.final = verificacaoAutomaticaDaConversao(
+              this.nomeLocalStorage,
+              tipoValores.processoConversao,
+              inicial,
+              tipoValores.initial,
+              tipoValores.final
+            );
+            break;
+          case "5":
+            tipoValores.initial = "CAD";
+            tipoValores.final = "USD";
+            this.valueInput.final = verificacaoAutomaticaDaConversao(
+              this.nomeLocalStorage,
+              tipoValores.processoConversao,
+              inicial,
+              tipoValores.initial,
+              tipoValores.final
+            );
+            break;
+          case "6":
+            tipoValores.initial = "USD";
+            tipoValores.final = "CAD";
+            this.valueInput.final = verificacaoAutomaticaDaConversao(
+              this.nomeLocalStorage,
+              tipoValores.processoConversao,
+              inicial,
+              tipoValores.initial,
+              tipoValores.final
+            );
+            break;
+        }
       })();
+    },
+    consoleLocal() {
+      console.log();
     }
   }
 };
