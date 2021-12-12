@@ -113,13 +113,25 @@
               </a>
             </li>
             <li class="page-item active">
-              <a class="page-link" @click="verificaPaginacao(0)">1</a>
+              <a
+                class="page-link"
+                @click="verificaPaginacao(0)"
+                v-bind:class="paginacao.class.campo1"
+              >1</a>
             </li>
             <li class="page-item">
-              <a class="page-link" @click="verificaPaginacao(1)">2</a>
+              <a
+                class="page-link"
+                @click="verificaPaginacao(1)"
+                v-bind:class="paginacao.class.campo2"
+              >2</a>
             </li>
             <li class="page-item">
-              <a class="page-link" @click="verificaPaginacao(2)">3</a>
+              <a
+                class="page-link"
+                @click="verificaPaginacao(2)"
+                v-bind:class="paginacao.class.campo3"
+              >3</a>
             </li>
             <li class="page-item">
               <a class="page-link" aria-label="Next">
@@ -154,9 +166,10 @@ export default {
       },
       paginacao: {
         atual: 0,
-        style: {
-          campo2: "",
-          campo3: ""
+        class: {
+          campo1: "containerTabela__paginacao--ativo",
+          campo2: "containerTabela__paginacao--desativo",
+          campo3: "containerTabela__paginacao--desativo"
         }
       },
       valueTable: {
@@ -349,20 +362,18 @@ export default {
                       //Cria uma nova paginação
                       if (
                         indexGrupoSecundario - 1 ===
-                        this.valueTable.matrix[indexGrupoPrincipal][
-                          indexGrupoSecundario
-                        ].length
+                          this.valueTable.matrix[indexGrupoPrincipal][
+                            indexGrupoSecundario
+                          ].length &&
+                        indexGrupoPrincipal <= 1
                       ) {
-                        this.valueTable.matrix = [
-                          this.valueTable.matrix[indexGrupoPrincipal],
-                          [
-                            ["", "", ""],
-                            ["", "", ""],
-                            ["", "", ""],
-                            ["", "", ""],
-                            ["", "", ""]
-                          ]
-                        ];
+                        this.valueTable.matrix.push([
+                          ["", "", ""],
+                          ["", "", ""],
+                          ["", "", ""],
+                          ["", "", ""],
+                          ["", "", ""]
+                        ]);
                       }
 
                       //Reseta os campos
@@ -378,10 +389,11 @@ export default {
     },
     verificaPaginacao(pagina) {
       if (this.valueTable.matrix.length > 1) {
-        if (pagina <= this.valueTable.matrix.length) {
+        if (pagina <= this.valueTable.matrix.length - 1) {
           this.paginacao.atual = pagina;
         }
       }
+      /* console.log(pagina); */
     },
     consoleLocal() {
       console.log();
@@ -397,6 +409,25 @@ export default {
     })();
 
     //Muda a propriedade da paginação quando ela é passivel de utilização
+    (() => {
+      const tamanhoMatrix = this.valueTable.matrix.length;
+
+      if (tamanhoMatrix <= 3) {
+        let cont = 1;
+        while (cont <= tamanhoMatrix) {
+          if (
+            this.paginacao.class[`campo${cont}`] ===
+            "containerTabela__paginacao--desativo"
+          ) {
+            console.log("mudar");
+            this.paginacao.class[`campo${cont}`] =
+              "containerTabela__paginacao--ativo";
+          }
+
+          cont++;
+        }
+      }
+    })();
   }
 };
 </script>
