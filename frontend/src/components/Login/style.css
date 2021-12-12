@@ -1,6 +1,6 @@
 .containerLogin {
-    min-width: 100vw;
-    min-height: 100vh;
+    min-width: 100%;
+    min-height: 100%;
     z-index: 10;
     background-color: rgba(0, 0, 0, 0.8);
 }
@@ -40,4 +40,10 @@
 .login_botao {
     background-color: #0F6195 !important;
     color: #fff !important;
+}
+
+@media screen and (max-width:990px) {
+    .containerLogin {
+        min-height: 102%;
+    }
 }

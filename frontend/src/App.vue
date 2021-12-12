@@ -86,6 +86,7 @@ body {
 
 #app {
   min-height: 100vh;
+  max-height: 1000px;
   background-color: #a9e3ea;
 }
 </style>
