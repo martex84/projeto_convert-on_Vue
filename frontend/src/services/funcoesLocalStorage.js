@@ -1,5 +1,4 @@
 function criarLocalStorage(nomeLocalStorage) {
-    console.log(nomeLocalStorage);
     localStorage.setItem(
         nomeLocalStorage,
         JSON.stringify({
