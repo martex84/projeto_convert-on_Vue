@@ -1,4 +1,5 @@
 function criarLocalStorage(nomeLocalStorage) {
+    console.log(nomeLocalStorage);
     localStorage.setItem(
         nomeLocalStorage,
         JSON.stringify({
@@ -15,7 +16,7 @@ function verificarLocalStorage(nomeLocalStorage) {
         return criarLocalStorage(nomeLocalStorage);
     }
 
-    if (valorLocalStorage.token === undefined || valorLocalStorage.tabela === undefined || valorLocalStorage.conversor === undefined) {
+    if (valorLocalStorage.token === undefined || valorLocalStorage.conversor === undefined) {
         return criarLocalStorage(nomeLocalStorage);
     }
 }

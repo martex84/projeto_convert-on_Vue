@@ -45,7 +45,7 @@
 
 <script>
 import { apiBanco } from "../../services/api.js";
-import criarLocalStorage from "../../services/funcoesLocalStorage.js";
+import { criarLocalStorage } from "../../services/funcoesLocalStorage.js";
 
 export default {
   name: "Login",
@@ -103,9 +103,9 @@ export default {
           if (
             localStoragePresente === true &&
             localStorage.getItem(this.nomeLocalStorage).token
-          )
+          ) {
             localStoragePresente = true;
-          else localStoragePresente = false;
+          } else localStoragePresente = false;
 
           //Cria o local storage caso tenha algume erro
           if (localStoragePresente === false) {
