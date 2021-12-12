@@ -33,13 +33,25 @@
 
 .containerTabela__paginacao--ativo {
     cursor: pointer;
+    color: #0d6efd !important;
 }
 
 .containerTabela__paginacao--desativo {
     cursor: default;
-    color: #0F6195 !important;
+    color: #e6e6e6 !important;
 }
 
 .containerTabela__paginacao--desativo:hover {
     background-color: #fff !important;
+}
+
+.containerTabela__paginacao--backgoundPaginacaoAtual {
+    background-color: #0d6efd !important;
+    border-color: #0d6efd !important;
+    color: #fff !important;
+}
+
+.containerTabela__paginacao--backgoundPaginacaoEspera {
+    background-color: #fff !important;
+    border-color: #dee2e6 !important;
 }

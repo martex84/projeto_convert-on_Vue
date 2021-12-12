@@ -116,21 +116,21 @@
               <a
                 class="page-link"
                 @click="verificaPaginacao(0)"
-                v-bind:class="paginacao.class.campo1"
+                v-bind:class="[paginacao.class.campo1.geral, paginacao.class.campo1.statusAtual]"
               >1</a>
             </li>
             <li class="page-item">
               <a
                 class="page-link"
                 @click="verificaPaginacao(1)"
-                v-bind:class="paginacao.class.campo2"
+                v-bind:class="[paginacao.class.campo2.geral, paginacao.class.campo2.statusAtual]"
               >2</a>
             </li>
             <li class="page-item">
               <a
                 class="page-link"
                 @click="verificaPaginacao(2)"
-                v-bind:class="paginacao.class.campo3"
+                v-bind:class="[paginacao.class.campo3.geral, paginacao.class.campo3.statusAtual]"
               >3</a>
             </li>
             <li class="page-item">
@@ -167,9 +167,18 @@ export default {
       paginacao: {
         atual: 0,
         class: {
-          campo1: "containerTabela__paginacao--ativo",
-          campo2: "containerTabela__paginacao--desativo",
-          campo3: "containerTabela__paginacao--desativo"
+          campo1: {
+            geral: "containerTabela__paginacao--ativo",
+            statusAtual: "containerTabela__paginacao--backgoundPaginacaoAtual"
+          },
+          campo2: {
+            geral: "containerTabela__paginacao--desativo",
+            statusAtual: "containerTabela__paginacao--backgoundPaginacaoEspera"
+          },
+          campo3: {
+            geral: "containerTabela__paginacao--desativo",
+            statusAtual: "containerTabela__paginacao--backgoundPaginacaoEspera"
+          }
         }
       },
       valueTable: {
@@ -388,9 +397,24 @@ export default {
       })();
     },
     verificaPaginacao(pagina) {
-      if (this.valueTable.matrix.length > 1) {
-        if (pagina <= this.valueTable.matrix.length - 1) {
+      const tamanhoMatrix = this.valueTable.matrix.length;
+      if (tamanhoMatrix > 1) {
+        if (pagina <= tamanhoMatrix - 1) {
+          let cont = 1;
+
           this.paginacao.atual = pagina;
+
+          while (cont <= tamanhoMatrix) {
+            if (cont - 1 === pagina) {
+              this.paginacao.class[`campo${cont}`].statusAtual =
+                "containerTabela__paginacao--backgoundPaginacaoAtual";
+            } else {
+              this.paginacao.class[`campo${cont}`].statusAtual =
+                "containerTabela__paginacao--backgoundPaginacaoEspera";
+            }
+
+            cont++;
+          }
         }
       }
       /* console.log(pagina); */
@@ -416,11 +440,10 @@ export default {
         let cont = 1;
         while (cont <= tamanhoMatrix) {
           if (
-            this.paginacao.class[`campo${cont}`] ===
+            this.paginacao.class[`campo${cont}`].geral ===
             "containerTabela__paginacao--desativo"
           ) {
-            console.log("mudar");
-            this.paginacao.class[`campo${cont}`] =
+            this.paginacao.class[`campo${cont}`].geral =
               "containerTabela__paginacao--ativo";
           }
 
