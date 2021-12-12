@@ -21,6 +21,20 @@
     color: #0F6195;
 }
 
+.containerConverter__informacaoInput>span {
+    color: #8B0000;
+}
+
+.containerConverter__select {
+    cursor: pointer;
+}
+
+.containerConverter__input--disabled {
+    cursor: not-allowed;
+
+    background-color: #fff !important;
+}
+
 .containerConverter__button {
     border-radius: 15px !important;
 

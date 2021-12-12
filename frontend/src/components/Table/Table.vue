@@ -16,7 +16,7 @@
       >
         <div class="containerConverter__informacaoInput d-flex justify-content-between w-100">
           <label>Valor Base</label>
-          <span>Incluir!</span>
+          <span v-bind:style="{display: this.style.span.valorbase}">Incluir!</span>
         </div>
         <div class="input-group mb-4">
           <span class="input-group-text">$</span>
@@ -30,14 +30,14 @@
         </div>
         <div class="containerConverter__informacaoInput d-flex justify-content-between w-100">
           <label>Tipo de conversão</label>
-          <span>Incluir!</span>
+          <span v-bind:style="{display: this.style.span.conversao}">Incluir!</span>
         </div>
         <select
-          class="form-select mb-4"
+          class="containerConverter__select form-select mb-4"
           aria-label="Default select example"
           v-model="valueInput.type"
         >
-          <option selected>Converter De/Para</option>
+          <option selected value="0">Converter De/Para</option>
           <option value="1">BRL > USD</option>
           <option value="2">USD > BRL</option>
           <option value="3">BRL > CAD</option>
@@ -48,15 +48,16 @@
         <button
           type="button"
           class="containerConverter__button btn mb-4"
-          @click="converterValores"
+          @click="verificaCampos"
         >Converter</button>
         <div class="input-group mb-3">
-          <span class="input-group-text" id="inputGroup-sizing-default">Resultado</span>
+          <span class="input-group-text" id="input-result">Resultado</span>
           <input
             type="text"
-            class="form-control"
-            aria-label="Sizing example input"
-            aria-describedby="inputGroup-sizing-default"
+            class="containerConverter__input--disabled form-control"
+            aria-label="Input Resultado"
+            aria-describedby="input-result"
+            disabled
             v-model="valueInput.final"
           />
         </div>
@@ -161,8 +162,14 @@ export default {
     return {
       valueInput: {
         inicial: "",
-        type: "",
+        type: "0",
         final: ""
+      },
+      style: {
+        span: {
+          valorbase: "none",
+          conversao: "none"
+        }
       },
       paginacao: {
         atual: 0,
@@ -196,6 +203,28 @@ export default {
     };
   },
   methods: {
+    verificaCampos() {
+      let campoVazio = true;
+
+      this.style.span.valorbase = "none";
+      this.style.span.conversao = "none";
+
+      if (this.valueInput.inicial === "") {
+        campoVazio = false;
+
+        this.style.span.valorbase = "inline";
+      }
+
+      if (this.valueInput.type === "0") {
+        campoVazio = false;
+
+        this.style.span.conversao = "inline";
+      }
+
+      if (campoVazio === true) {
+        this.converterValores();
+      }
+    },
     converterValores() {
       (async () => {
         const horaAtual = new Date().getHours();
