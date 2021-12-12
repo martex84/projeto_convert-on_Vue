@@ -144,7 +144,11 @@ export default {
               .get(
                 `/user?login=${this.input.valorLogin}&senha=${this.input.valorSenha}`
               )
-              .catch(err => console.log(err));
+              .catch(err => {
+                this.bodyMensagem = `Erro ${err}`;
+
+                this.style.modelLoginBancoDados = "block";
+              });
 
             if (resultadoPesquisaUsuario.data.error !== undefined) {
               this.bodyMensagem = `Erro ${resultadoPesquisaUsuario.data.error} -- Usuário ou senha inválida!`;
