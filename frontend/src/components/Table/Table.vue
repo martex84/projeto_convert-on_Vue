@@ -75,54 +75,54 @@
           <tbody>
             <tr>
               <th scope="row">1</th>
-              <td>{{this.valueTable.matrix[0][0][0]}}</td>
-              <td>{{this.valueTable.matrix[0][0][1]}}</td>
-              <td>{{this.valueTable.matrix[0][0][2]}}</td>
+              <td>{{this.valueTable.matrix[paginacao.atual][0][0]}}</td>
+              <td>{{this.valueTable.matrix[paginacao.atual][0][1]}}</td>
+              <td>{{this.valueTable.matrix[paginacao.atual][0][2]}}</td>
             </tr>
             <tr>
               <th scope="row">2</th>
-              <td>{{this.valueTable.matrix[0][1][0]}}</td>
-              <td>{{this.valueTable.matrix[0][1][1]}}</td>
-              <td>{{this.valueTable.matrix[0][1][2]}}</td>
+              <td>{{this.valueTable.matrix[paginacao.atual][1][0]}}</td>
+              <td>{{this.valueTable.matrix[paginacao.atual][1][1]}}</td>
+              <td>{{this.valueTable.matrix[paginacao.atual][1][2]}}</td>
             </tr>
             <tr>
               <th scope="row">3</th>
-              <td>{{this.valueTable.matrix[0][2][0]}}</td>
-              <td>{{this.valueTable.matrix[0][2][1]}}</td>
-              <td>{{this.valueTable.matrix[0][2][2]}}</td>
+              <td>{{this.valueTable.matrix[paginacao.atual][2][0]}}</td>
+              <td>{{this.valueTable.matrix[paginacao.atual][2][1]}}</td>
+              <td>{{this.valueTable.matrix[paginacao.atual][2][2]}}</td>
             </tr>
             <tr>
               <th scope="row">4</th>
-              <td>{{this.valueTable.matrix[0][3][0]}}</td>
-              <td>{{this.valueTable.matrix[0][3][1]}}</td>
-              <td>{{this.valueTable.matrix[0][3][2]}}</td>
+              <td>{{this.valueTable.matrix[paginacao.atual][3][0]}}</td>
+              <td>{{this.valueTable.matrix[paginacao.atual][3][1]}}</td>
+              <td>{{this.valueTable.matrix[paginacao.atual][3][2]}}</td>
             </tr>
             <tr>
               <th scope="row">5</th>
-              <td>{{this.valueTable.matrix[0][4][0]}}</td>
-              <td>{{this.valueTable.matrix[0][4][1]}}</td>
-              <td>{{this.valueTable.matrix[0][4][2]}}</td>
+              <td>{{this.valueTable.matrix[paginacao.atual][4][0]}}</td>
+              <td>{{this.valueTable.matrix[paginacao.atual][4][1]}}</td>
+              <td>{{this.valueTable.matrix[paginacao.atual][4][2]}}</td>
             </tr>
           </tbody>
         </table>
         <nav aria-label="Page navigation example">
           <ul class="pagination">
             <li class="page-item">
-              <a class="page-link" href="#" aria-label="Previous">
+              <a class="page-link" aria-label="Previous">
                 <span aria-hidden="true">&laquo;</span>
               </a>
             </li>
             <li class="page-item active">
-              <a class="page-link" href="#">1</a>
+              <a class="page-link" @click="verificaPaginacao(0)">1</a>
             </li>
             <li class="page-item">
-              <a class="page-link" href="#">2</a>
+              <a class="page-link" @click="verificaPaginacao(1)">2</a>
             </li>
             <li class="page-item">
-              <a class="page-link" href="#">3</a>
+              <a class="page-link" @click="verificaPaginacao(2)">3</a>
             </li>
             <li class="page-item">
-              <a class="page-link" href="#" aria-label="Next">
+              <a class="page-link" aria-label="Next">
                 <span aria-hidden="true">&raquo;</span>
               </a>
             </li>
@@ -151,6 +151,13 @@ export default {
         inicial: "",
         type: "",
         final: ""
+      },
+      paginacao: {
+        atual: 0,
+        style: {
+          campo2: "",
+          campo3: ""
+        }
       },
       valueTable: {
         pages: "1",
@@ -342,7 +349,9 @@ export default {
                       //Cria uma nova paginação
                       if (
                         indexGrupoSecundario - 1 ===
-                        this.valueTable.matrix[0][0].length
+                        this.valueTable.matrix[indexGrupoPrincipal][
+                          indexGrupoSecundario
+                        ].length
                       ) {
                         this.valueTable.matrix = [
                           this.valueTable.matrix[indexGrupoPrincipal],
@@ -356,10 +365,6 @@ export default {
                         ];
                       }
 
-                      if (indexGrupoPrincipal === 1) {
-                        console.log(this.valueTable.matrix);
-                      }
-
                       //Reseta os campos
                       this.valueInput.inicial = "";
                     }
@@ -370,6 +375,13 @@ export default {
           }
         );
       })();
+    },
+    verificaPaginacao(pagina) {
+      if (this.valueTable.matrix.length > 1) {
+        if (pagina <= this.valueTable.matrix.length) {
+          this.paginacao.atual = pagina;
+        }
+      }
     },
     consoleLocal() {
       console.log();
@@ -383,6 +395,8 @@ export default {
         this.valueInput.final = "";
       }
     })();
+
+    //Muda a propriedade da paginação quando ela é passivel de utilização
   }
 };
 </script>
