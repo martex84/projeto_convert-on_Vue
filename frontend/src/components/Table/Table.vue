@@ -26,7 +26,6 @@
             aria-label="Amount (to the nearest dollar)"
             v-model="valueInput.inicial"
           />
-          <span class="input-group-text">.00</span>
         </div>
         <div class="containerConverter__informacaoInput d-flex justify-content-between w-100">
           <label>Tipo de conversão</label>
@@ -451,6 +450,47 @@ export default {
     consoleLocal() {
       console.log();
     }
+  },
+  beforeUpdate() {
+    //Ira verificar se o campo Valor Base contem apenas numeros
+    (() => {
+      const valoresPerimitidos = [
+        "0",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "."
+      ];
+      const valorBase = this.valueInput.inicial;
+      let valorRetorno = "";
+      let contagemPonto = 0;
+
+      if (valorBase !== "") {
+        for (let valorBaseCaracter of valorBase) {
+          for (let valorConsulta of valoresPerimitidos) {
+            if (valorBaseCaracter === valorConsulta) {
+              if (valorConsulta === ".") {
+                if (contagemPonto === 0) {
+                  contagemPonto++;
+
+                  valorRetorno = `${valorRetorno}${valorConsulta}`;
+                }
+              } else {
+                valorRetorno = `${valorRetorno}${valorConsulta}`;
+              }
+            }
+          }
+        }
+      }
+
+      this.valueInput.inicial = valorRetorno;
+    })();
   },
   updated() {
     //Função para apagar o campo Resultado ao iniciar o Valor Base
