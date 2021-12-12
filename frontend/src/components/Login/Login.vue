@@ -135,6 +135,8 @@ export default {
                 this.nomeLocalStorage,
                 JSON.stringify(valorLocalStorage)
               );
+
+              this.propsContainer = "none";
             }
           })();
         }
