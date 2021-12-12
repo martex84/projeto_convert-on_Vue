@@ -1,6 +1,8 @@
-.container-login {
-    min-width: 100vh;
-    height: 100%;
+.containerLogin {
+    min-width: 100vw;
+    min-height: 100vh;
+    z-index: 10;
+    background-color: rgba(0, 0, 0, 0.8);
 }
 
 .modalOn {
@@ -25,13 +27,13 @@
     color: #8B0000;
 }
 
-.input-login {
+.containerLogin_input {
     padding-left: 5px;
 
     background-color: #37AFC8;
 }
 
-.input-login::placeholder {
+.containerLogin_input::placeholder {
     color: #fff;
 }
 

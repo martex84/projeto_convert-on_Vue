@@ -1,5 +1,5 @@
 <template>
-  <div class="container-login">
+  <div class="containerLogin position-absolute">
     <div class="modal modalOn" tabindex="-1" v-bind:style="{ display:propsContainer}">
       <div class="modal-dialog">
         <div class="modal-content container-modalContent-login">
@@ -12,7 +12,7 @@
               <span v-bind:style="{display:style.span.displayLogin}">Incluir!</span>
             </div>
             <input
-              class="input-login borderTransparent"
+              class="containerLogin_input borderTransparent"
               type="email"
               pattern=".+@.+\.com"
               placeholder="Insira seu email"
@@ -23,7 +23,7 @@
               <span v-bind:style="{display:style.span.displaySenha}">Incluir!</span>
             </div>
             <input
-              class="input-login borderTransparent"
+              class="containerLogin_input borderTransparent"
               type="password"
               placeholder="Insira sua senha"
               v-model="input.valorSenha"
