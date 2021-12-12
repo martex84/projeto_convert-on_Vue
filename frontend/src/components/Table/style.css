@@ -9,6 +9,7 @@
     width: 450px;
     height: 410px;
     padding: 40px;
+    margin-left: auto;
 
     background-color: #37AFC8;
 }
@@ -68,4 +69,16 @@
 .containerTabela__paginacao--backgoundPaginacaoEspera {
     background-color: #fff !important;
     border-color: #dee2e6 !important;
+}
+
+@media screen and (max-width:990px) {
+
+    .containerTable {
+        margin-bottom: 16px;
+    }
+
+    .containerConteudo__containerTabela,
+    .containerConteudo__containerConverter {
+        margin: auto !important;
+    }
 }

@@ -1,12 +1,12 @@
 <template>
   <div id="app" class="d-flex justify-content-center align-items-center position-relative">
-    <Login :nomeLocalStorage="nomeLocalStorage" :propsContainer="propsContainer" />
+    <!-- <Login :nomeLocalStorage="nomeLocalStorage" :propsContainer="propsContainer" /> -->
     <Table :nomeLocalStorage="nomeLocalStorage" />
   </div>
 </template>
 
 <script>
-import Login from "./components/Login/Login.vue";
+/* import Login from "./components/Login/Login.vue"; */
 import Table from "./components/Table/Table.vue";
 import { apiBanco } from "./services/api.js";
 import { verificarLocalStorage } from "./services/funcoesLocalStorage.js";
@@ -16,7 +16,7 @@ let nomeLocalStorage = "convert-on";
 export default {
   name: "App",
   components: {
-    Login,
+    /* Login, */
     Table
   },
   data() {

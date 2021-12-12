@@ -61,7 +61,7 @@
           />
         </div>
       </div>
-      <div class="containerConteudo__containerTabela d-flex align-items-center flex-column ms-auto">
+      <div class="containerConteudo__containerTabela d-flex align-items-center flex-column">
         <h3 class="h3">Histórico de Conversões</h3>
         <table class="table">
           <thead>
