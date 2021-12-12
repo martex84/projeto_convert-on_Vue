@@ -81,27 +81,27 @@
             </tr>
             <tr>
               <th scope="row">2</th>
-              <td>15</td>
-              <td>30</td>
-              <td>Br>Dolar</td>
+              <td>{{this.valueTable.matrix[0][1][0]}}</td>
+              <td>{{this.valueTable.matrix[0][1][1]}}</td>
+              <td>{{this.valueTable.matrix[0][1][2]}}</td>
             </tr>
             <tr>
               <th scope="row">3</th>
-              <td>15</td>
-              <td>30</td>
-              <td>Br>Dolar</td>
+              <td>{{this.valueTable.matrix[0][2][0]}}</td>
+              <td>{{this.valueTable.matrix[0][2][1]}}</td>
+              <td>{{this.valueTable.matrix[0][2][2]}}</td>
             </tr>
             <tr>
               <th scope="row">4</th>
-              <td>15</td>
-              <td>30</td>
-              <td>Br>Dolar</td>
+              <td>{{this.valueTable.matrix[0][3][0]}}</td>
+              <td>{{this.valueTable.matrix[0][3][1]}}</td>
+              <td>{{this.valueTable.matrix[0][3][2]}}</td>
             </tr>
             <tr>
               <th scope="row">5</th>
-              <td>15</td>
-              <td>30</td>
-              <td>Br>Dolar</td>
+              <td>{{this.valueTable.matrix[0][4][0]}}</td>
+              <td>{{this.valueTable.matrix[0][4][1]}}</td>
+              <td>{{this.valueTable.matrix[0][4][2]}}</td>
             </tr>
           </tbody>
         </table>
@@ -156,11 +156,11 @@ export default {
         pages: "1",
         matrix: [
           [
-            [0, 0, 0],
-            [0, 0, 0],
-            [0, 0, 0],
-            [0, 0, 0],
-            [0, 0, 0]
+            ["", "", ""],
+            ["", "", ""],
+            ["", "", ""],
+            ["", "", ""],
+            ["", "", ""]
           ]
         ]
       }
@@ -171,6 +171,7 @@ export default {
       (async () => {
         const horaAtual = new Date().getHours();
         const { inicial, type } = this.valueInput;
+        let valorFinal = "";
         let tipoValores = {
           initial: "",
           final: "",
@@ -240,7 +241,7 @@ export default {
           case "1":
             tipoValores.initial = "BRL";
             tipoValores.final = "USD";
-            this.valueInput.final = verificacaoAutomaticaDaConversao(
+            valorFinal = verificacaoAutomaticaDaConversao(
               this.nomeLocalStorage,
               tipoValores.processoConversao,
               inicial,
@@ -251,7 +252,7 @@ export default {
           case "2":
             tipoValores.initial = "USD";
             tipoValores.final = "BRL";
-            this.valueInput.final = verificacaoAutomaticaDaConversao(
+            valorFinal = verificacaoAutomaticaDaConversao(
               this.nomeLocalStorage,
               tipoValores.processoConversao,
               inicial,
@@ -262,7 +263,7 @@ export default {
           case "3":
             tipoValores.initial = "BRL";
             tipoValores.final = "CAD";
-            this.valueInput.final = verificacaoAutomaticaDaConversao(
+            valorFinal = verificacaoAutomaticaDaConversao(
               this.nomeLocalStorage,
               tipoValores.processoConversao,
               inicial,
@@ -273,7 +274,7 @@ export default {
           case "4":
             tipoValores.initial = "CAD";
             tipoValores.final = "BRL";
-            this.valueInput.final = verificacaoAutomaticaDaConversao(
+            valorFinal = verificacaoAutomaticaDaConversao(
               this.nomeLocalStorage,
               tipoValores.processoConversao,
               inicial,
@@ -284,7 +285,7 @@ export default {
           case "5":
             tipoValores.initial = "CAD";
             tipoValores.final = "USD";
-            this.valueInput.final = verificacaoAutomaticaDaConversao(
+            valorFinal = verificacaoAutomaticaDaConversao(
               this.nomeLocalStorage,
               tipoValores.processoConversao,
               inicial,
@@ -295,7 +296,7 @@ export default {
           case "6":
             tipoValores.initial = "USD";
             tipoValores.final = "CAD";
-            this.valueInput.final = verificacaoAutomaticaDaConversao(
+            valorFinal = verificacaoAutomaticaDaConversao(
               this.nomeLocalStorage,
               tipoValores.processoConversao,
               inicial,
@@ -304,10 +305,62 @@ export default {
             );
             break;
         }
+
+        this.valueInput.final = valorFinal;
+
+        //Salva os valores dentro da matriz
+        this.valueTable.matrix.forEach(
+          (grupoPrincipal, indexGrupoPrincipal) => {
+            let valorMatrizSalvo = false;
+
+            if (valorMatrizSalvo === false) {
+              grupoPrincipal.forEach(
+                (grupoSecundario, indexGrupoSecundario) => {
+                  if (valorMatrizSalvo === false) {
+                    let verificaCampoLimpo = false;
+
+                    grupoSecundario.forEach(valor => {
+                      if (valor === "") verificaCampoLimpo = true;
+                      else verificaCampoLimpo = false;
+                    });
+
+                    if (verificaCampoLimpo === true) {
+                      valorMatrizSalvo = true;
+
+                      console.log(this.valueTable.matrix);
+
+                      this.valueTable.matrix[indexGrupoPrincipal][
+                        indexGrupoSecundario
+                      ][0] = inicial;
+
+                      this.valueTable.matrix[indexGrupoPrincipal][
+                        indexGrupoSecundario
+                      ][1] = valorFinal;
+
+                      this.valueTable.matrix[indexGrupoPrincipal][
+                        indexGrupoSecundario
+                      ][2] = `${tipoValores.initial} > ${tipoValores.final}`;
+
+                      //Reseta os campos
+                      this.valueInput.inicial = "";
+                    }
+                  }
+                }
+              );
+            }
+          }
+        );
       })();
     },
     consoleLocal() {
       console.log();
+    }
+  },
+  updated() {
+    let valorInical = this.valueInput.inicial;
+    if (valorInical.length === 1 && this.valueInput.final !== "") {
+      this.valueInput.final = "";
+      console.log("Update");
     }
   }
 };
