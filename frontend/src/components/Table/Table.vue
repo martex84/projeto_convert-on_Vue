@@ -16,7 +16,7 @@
       >
         <div class="containerConverter__informacaoInput d-flex justify-content-between w-100">
           <label>Valor Base</label>
-          <span>Incluir!</span>
+          <span v-bind:style="{display: this.style.span.valorbase}">Incluir!</span>
         </div>
         <div class="input-group mb-4">
           <span class="input-group-text">$</span>
@@ -30,14 +30,14 @@
         </div>
         <div class="containerConverter__informacaoInput d-flex justify-content-between w-100">
           <label>Tipo de conversão</label>
-          <span>Incluir!</span>
+          <span v-bind:style="{display: this.style.span.conversao}">Incluir!</span>
         </div>
         <select
-          class="form-select mb-4"
+          class="containerConverter__select form-select mb-4"
           aria-label="Default select example"
           v-model="valueInput.type"
         >
-          <option selected>Converter De/Para</option>
+          <option selected value="0">Converter De/Para</option>
           <option value="1">BRL > USD</option>
           <option value="2">USD > BRL</option>
           <option value="3">BRL > CAD</option>
@@ -48,15 +48,16 @@
         <button
           type="button"
           class="containerConverter__button btn mb-4"
-          @click="converterValores"
+          @click="verificaCampos"
         >Converter</button>
         <div class="input-group mb-3">
-          <span class="input-group-text" id="inputGroup-sizing-default">Resultado</span>
+          <span class="input-group-text" id="input-result">Resultado</span>
           <input
             type="text"
-            class="form-control"
-            aria-label="Sizing example input"
-            aria-describedby="inputGroup-sizing-default"
+            class="containerConverter__input--disabled form-control"
+            aria-label="Input Resultado"
+            aria-describedby="input-result"
+            disabled
             v-model="valueInput.final"
           />
         </div>
@@ -116,21 +117,21 @@
               <a
                 class="page-link"
                 @click="verificaPaginacao(0)"
-                v-bind:class="paginacao.class.campo1"
+                v-bind:class="[paginacao.class.campo1.geral, paginacao.class.campo1.statusAtual]"
               >1</a>
             </li>
             <li class="page-item">
               <a
                 class="page-link"
                 @click="verificaPaginacao(1)"
-                v-bind:class="paginacao.class.campo2"
+                v-bind:class="[paginacao.class.campo2.geral, paginacao.class.campo2.statusAtual]"
               >2</a>
             </li>
             <li class="page-item">
               <a
                 class="page-link"
                 @click="verificaPaginacao(2)"
-                v-bind:class="paginacao.class.campo3"
+                v-bind:class="[paginacao.class.campo3.geral, paginacao.class.campo3.statusAtual]"
               >3</a>
             </li>
             <li class="page-item">
@@ -161,15 +162,30 @@ export default {
     return {
       valueInput: {
         inicial: "",
-        type: "",
+        type: "0",
         final: ""
+      },
+      style: {
+        span: {
+          valorbase: "none",
+          conversao: "none"
+        }
       },
       paginacao: {
         atual: 0,
         class: {
-          campo1: "containerTabela__paginacao--ativo",
-          campo2: "containerTabela__paginacao--desativo",
-          campo3: "containerTabela__paginacao--desativo"
+          campo1: {
+            geral: "containerTabela__paginacao--ativo",
+            statusAtual: "containerTabela__paginacao--backgoundPaginacaoAtual"
+          },
+          campo2: {
+            geral: "containerTabela__paginacao--desativo",
+            statusAtual: "containerTabela__paginacao--backgoundPaginacaoEspera"
+          },
+          campo3: {
+            geral: "containerTabela__paginacao--desativo",
+            statusAtual: "containerTabela__paginacao--backgoundPaginacaoEspera"
+          }
         }
       },
       valueTable: {
@@ -187,6 +203,28 @@ export default {
     };
   },
   methods: {
+    verificaCampos() {
+      let campoVazio = true;
+
+      this.style.span.valorbase = "none";
+      this.style.span.conversao = "none";
+
+      if (this.valueInput.inicial === "") {
+        campoVazio = false;
+
+        this.style.span.valorbase = "inline";
+      }
+
+      if (this.valueInput.type === "0") {
+        campoVazio = false;
+
+        this.style.span.conversao = "inline";
+      }
+
+      if (campoVazio === true) {
+        this.converterValores();
+      }
+    },
     converterValores() {
       (async () => {
         const horaAtual = new Date().getHours();
@@ -388,9 +426,24 @@ export default {
       })();
     },
     verificaPaginacao(pagina) {
-      if (this.valueTable.matrix.length > 1) {
-        if (pagina <= this.valueTable.matrix.length - 1) {
+      const tamanhoMatrix = this.valueTable.matrix.length;
+      if (tamanhoMatrix > 1) {
+        if (pagina <= tamanhoMatrix - 1) {
+          let cont = 1;
+
           this.paginacao.atual = pagina;
+
+          while (cont <= tamanhoMatrix) {
+            if (cont - 1 === pagina) {
+              this.paginacao.class[`campo${cont}`].statusAtual =
+                "containerTabela__paginacao--backgoundPaginacaoAtual";
+            } else {
+              this.paginacao.class[`campo${cont}`].statusAtual =
+                "containerTabela__paginacao--backgoundPaginacaoEspera";
+            }
+
+            cont++;
+          }
         }
       }
       /* console.log(pagina); */
@@ -416,11 +469,10 @@ export default {
         let cont = 1;
         while (cont <= tamanhoMatrix) {
           if (
-            this.paginacao.class[`campo${cont}`] ===
+            this.paginacao.class[`campo${cont}`].geral ===
             "containerTabela__paginacao--desativo"
           ) {
-            console.log("mudar");
-            this.paginacao.class[`campo${cont}`] =
+            this.paginacao.class[`campo${cont}`].geral =
               "containerTabela__paginacao--ativo";
           }
 
