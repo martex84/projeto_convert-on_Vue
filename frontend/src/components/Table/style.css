@@ -30,3 +30,16 @@
 .containerTabela__titulo--cor {
     color: #fff;
 }
+
+.containerTabela__paginacao--ativo {
+    cursor: pointer;
+}
+
+.containerTabela__paginacao--desativo {
+    cursor: default;
+    color: #0F6195 !important;
+}
+
+.containerTabela__paginacao--desativo:hover {
+    background-color: #fff !important;
+}

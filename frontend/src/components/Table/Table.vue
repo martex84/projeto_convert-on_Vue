@@ -75,54 +75,66 @@
           <tbody>
             <tr>
               <th scope="row">1</th>
-              <td>{{this.valueTable.matrix[0][0][0]}}</td>
-              <td>{{this.valueTable.matrix[0][0][1]}}</td>
-              <td>{{this.valueTable.matrix[0][0][2]}}</td>
+              <td>{{this.valueTable.matrix[paginacao.atual][0][0]}}</td>
+              <td>{{this.valueTable.matrix[paginacao.atual][0][1]}}</td>
+              <td>{{this.valueTable.matrix[paginacao.atual][0][2]}}</td>
             </tr>
             <tr>
               <th scope="row">2</th>
-              <td>15</td>
-              <td>30</td>
-              <td>Br>Dolar</td>
+              <td>{{this.valueTable.matrix[paginacao.atual][1][0]}}</td>
+              <td>{{this.valueTable.matrix[paginacao.atual][1][1]}}</td>
+              <td>{{this.valueTable.matrix[paginacao.atual][1][2]}}</td>
             </tr>
             <tr>
               <th scope="row">3</th>
-              <td>15</td>
-              <td>30</td>
-              <td>Br>Dolar</td>
+              <td>{{this.valueTable.matrix[paginacao.atual][2][0]}}</td>
+              <td>{{this.valueTable.matrix[paginacao.atual][2][1]}}</td>
+              <td>{{this.valueTable.matrix[paginacao.atual][2][2]}}</td>
             </tr>
             <tr>
               <th scope="row">4</th>
-              <td>15</td>
-              <td>30</td>
-              <td>Br>Dolar</td>
+              <td>{{this.valueTable.matrix[paginacao.atual][3][0]}}</td>
+              <td>{{this.valueTable.matrix[paginacao.atual][3][1]}}</td>
+              <td>{{this.valueTable.matrix[paginacao.atual][3][2]}}</td>
             </tr>
             <tr>
               <th scope="row">5</th>
-              <td>15</td>
-              <td>30</td>
-              <td>Br>Dolar</td>
+              <td>{{this.valueTable.matrix[paginacao.atual][4][0]}}</td>
+              <td>{{this.valueTable.matrix[paginacao.atual][4][1]}}</td>
+              <td>{{this.valueTable.matrix[paginacao.atual][4][2]}}</td>
             </tr>
           </tbody>
         </table>
         <nav aria-label="Page navigation example">
           <ul class="pagination">
             <li class="page-item">
-              <a class="page-link" href="#" aria-label="Previous">
+              <a class="page-link" aria-label="Previous">
                 <span aria-hidden="true">&laquo;</span>
               </a>
             </li>
             <li class="page-item active">
-              <a class="page-link" href="#">1</a>
+              <a
+                class="page-link"
+                @click="verificaPaginacao(0)"
+                v-bind:class="paginacao.class.campo1"
+              >1</a>
             </li>
             <li class="page-item">
-              <a class="page-link" href="#">2</a>
+              <a
+                class="page-link"
+                @click="verificaPaginacao(1)"
+                v-bind:class="paginacao.class.campo2"
+              >2</a>
             </li>
             <li class="page-item">
-              <a class="page-link" href="#">3</a>
+              <a
+                class="page-link"
+                @click="verificaPaginacao(2)"
+                v-bind:class="paginacao.class.campo3"
+              >3</a>
             </li>
             <li class="page-item">
-              <a class="page-link" href="#" aria-label="Next">
+              <a class="page-link" aria-label="Next">
                 <span aria-hidden="true">&raquo;</span>
               </a>
             </li>
@@ -152,15 +164,23 @@ export default {
         type: "",
         final: ""
       },
+      paginacao: {
+        atual: 0,
+        class: {
+          campo1: "containerTabela__paginacao--ativo",
+          campo2: "containerTabela__paginacao--desativo",
+          campo3: "containerTabela__paginacao--desativo"
+        }
+      },
       valueTable: {
         pages: "1",
         matrix: [
           [
-            [0, 0, 0],
-            [0, 0, 0],
-            [0, 0, 0],
-            [0, 0, 0],
-            [0, 0, 0]
+            ["", "", ""],
+            ["", "", ""],
+            ["", "", ""],
+            ["", "", ""],
+            ["", "", ""]
           ]
         ]
       }
@@ -171,6 +191,7 @@ export default {
       (async () => {
         const horaAtual = new Date().getHours();
         const { inicial, type } = this.valueInput;
+        let valorFinal = "";
         let tipoValores = {
           initial: "",
           final: "",
@@ -240,7 +261,7 @@ export default {
           case "1":
             tipoValores.initial = "BRL";
             tipoValores.final = "USD";
-            this.valueInput.final = verificacaoAutomaticaDaConversao(
+            valorFinal = verificacaoAutomaticaDaConversao(
               this.nomeLocalStorage,
               tipoValores.processoConversao,
               inicial,
@@ -251,7 +272,7 @@ export default {
           case "2":
             tipoValores.initial = "USD";
             tipoValores.final = "BRL";
-            this.valueInput.final = verificacaoAutomaticaDaConversao(
+            valorFinal = verificacaoAutomaticaDaConversao(
               this.nomeLocalStorage,
               tipoValores.processoConversao,
               inicial,
@@ -262,7 +283,7 @@ export default {
           case "3":
             tipoValores.initial = "BRL";
             tipoValores.final = "CAD";
-            this.valueInput.final = verificacaoAutomaticaDaConversao(
+            valorFinal = verificacaoAutomaticaDaConversao(
               this.nomeLocalStorage,
               tipoValores.processoConversao,
               inicial,
@@ -273,7 +294,7 @@ export default {
           case "4":
             tipoValores.initial = "CAD";
             tipoValores.final = "BRL";
-            this.valueInput.final = verificacaoAutomaticaDaConversao(
+            valorFinal = verificacaoAutomaticaDaConversao(
               this.nomeLocalStorage,
               tipoValores.processoConversao,
               inicial,
@@ -284,7 +305,7 @@ export default {
           case "5":
             tipoValores.initial = "CAD";
             tipoValores.final = "USD";
-            this.valueInput.final = verificacaoAutomaticaDaConversao(
+            valorFinal = verificacaoAutomaticaDaConversao(
               this.nomeLocalStorage,
               tipoValores.processoConversao,
               inicial,
@@ -295,7 +316,7 @@ export default {
           case "6":
             tipoValores.initial = "USD";
             tipoValores.final = "CAD";
-            this.valueInput.final = verificacaoAutomaticaDaConversao(
+            valorFinal = verificacaoAutomaticaDaConversao(
               this.nomeLocalStorage,
               tipoValores.processoConversao,
               inicial,
@@ -304,11 +325,109 @@ export default {
             );
             break;
         }
+
+        this.valueInput.final = valorFinal;
+
+        //Salva os valores dentro da matriz
+        this.valueTable.matrix.forEach(
+          (grupoPrincipal, indexGrupoPrincipal) => {
+            let valorMatrizSalvo = false;
+
+            if (valorMatrizSalvo === false) {
+              grupoPrincipal.forEach(
+                (grupoSecundario, indexGrupoSecundario) => {
+                  if (valorMatrizSalvo === false) {
+                    let verificaCampoLimpo = false;
+
+                    grupoSecundario.forEach(valor => {
+                      if (valor === "") verificaCampoLimpo = true;
+                      else verificaCampoLimpo = false;
+                    });
+
+                    if (verificaCampoLimpo === true) {
+                      valorMatrizSalvo = true;
+
+                      this.valueTable.matrix[indexGrupoPrincipal][
+                        indexGrupoSecundario
+                      ][0] = inicial;
+
+                      this.valueTable.matrix[indexGrupoPrincipal][
+                        indexGrupoSecundario
+                      ][1] = valorFinal;
+
+                      this.valueTable.matrix[indexGrupoPrincipal][
+                        indexGrupoSecundario
+                      ][2] = `${tipoValores.initial} > ${tipoValores.final}`;
+
+                      //Cria uma nova paginação
+                      if (
+                        indexGrupoSecundario - 1 ===
+                          this.valueTable.matrix[indexGrupoPrincipal][
+                            indexGrupoSecundario
+                          ].length &&
+                        indexGrupoPrincipal <= 1
+                      ) {
+                        this.valueTable.matrix.push([
+                          ["", "", ""],
+                          ["", "", ""],
+                          ["", "", ""],
+                          ["", "", ""],
+                          ["", "", ""]
+                        ]);
+                      }
+
+                      //Reseta os campos
+                      this.valueInput.inicial = "";
+                    }
+                  }
+                }
+              );
+            }
+          }
+        );
       })();
+    },
+    verificaPaginacao(pagina) {
+      if (this.valueTable.matrix.length > 1) {
+        if (pagina <= this.valueTable.matrix.length - 1) {
+          this.paginacao.atual = pagina;
+        }
+      }
+      /* console.log(pagina); */
     },
     consoleLocal() {
       console.log();
     }
+  },
+  updated() {
+    //Função para apagar o campo Resultado ao iniciar o Valor Base
+    (() => {
+      let valorInical = this.valueInput.inicial;
+      if (valorInical.length === 1 && this.valueInput.final !== "") {
+        this.valueInput.final = "";
+      }
+    })();
+
+    //Muda a propriedade da paginação quando ela é passivel de utilização
+    (() => {
+      const tamanhoMatrix = this.valueTable.matrix.length;
+
+      if (tamanhoMatrix <= 3) {
+        let cont = 1;
+        while (cont <= tamanhoMatrix) {
+          if (
+            this.paginacao.class[`campo${cont}`] ===
+            "containerTabela__paginacao--desativo"
+          ) {
+            console.log("mudar");
+            this.paginacao.class[`campo${cont}`] =
+              "containerTabela__paginacao--ativo";
+          }
+
+          cont++;
+        }
+      }
+    })();
   }
 };
 </script>
