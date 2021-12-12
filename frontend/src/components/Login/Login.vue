@@ -1,6 +1,6 @@
 <template>
-  <div class="containerLogin position-absolute">
-    <div class="modal modalOn" tabindex="-1" v-bind:style="{ display:propsContainer}">
+  <div class="containerLogin position-absolute" v-bind:style="{display:propsContainer}">
+    <div class="modal modalOn" tabindex="-1" style="display:grid">
       <div class="modal-dialog">
         <div class="modal-content container-modalContent-login">
           <div class="modal-header borderTransparent">
