@@ -16,7 +16,8 @@
               ></button>
             </div>
             <div>
-              <h4 class="h4 text-center" style="margin-bottom: 0">Bem vindo de volta!</h4>
+              <h4 class="h4 text-center">Token confirmado,</h4>
+              <h4 class="h4 text-center" style="margin-bottom: 0">bem vindo de volta!</h4>
             </div>
           </div>
         </div>
