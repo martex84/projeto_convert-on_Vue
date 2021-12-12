@@ -3,7 +3,6 @@ function criarLocalStorage(nomeLocalStorage) {
         nomeLocalStorage,
         JSON.stringify({
             token: "",
-            tabela: "",
             conversor: "",
         })
     );
