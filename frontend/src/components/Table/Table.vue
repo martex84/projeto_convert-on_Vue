@@ -327,8 +327,6 @@ export default {
                     if (verificaCampoLimpo === true) {
                       valorMatrizSalvo = true;
 
-                      console.log(this.valueTable.matrix);
-
                       this.valueTable.matrix[indexGrupoPrincipal][
                         indexGrupoSecundario
                       ][0] = inicial;
@@ -340,6 +338,27 @@ export default {
                       this.valueTable.matrix[indexGrupoPrincipal][
                         indexGrupoSecundario
                       ][2] = `${tipoValores.initial} > ${tipoValores.final}`;
+
+                      //Cria uma nova paginação
+                      if (
+                        indexGrupoSecundario - 1 ===
+                        this.valueTable.matrix[0][0].length
+                      ) {
+                        this.valueTable.matrix = [
+                          this.valueTable.matrix[indexGrupoPrincipal],
+                          [
+                            ["", "", ""],
+                            ["", "", ""],
+                            ["", "", ""],
+                            ["", "", ""],
+                            ["", "", ""]
+                          ]
+                        ];
+                      }
+
+                      if (indexGrupoPrincipal === 1) {
+                        console.log(this.valueTable.matrix);
+                      }
 
                       //Reseta os campos
                       this.valueInput.inicial = "";
@@ -357,11 +376,13 @@ export default {
     }
   },
   updated() {
-    let valorInical = this.valueInput.inicial;
-    if (valorInical.length === 1 && this.valueInput.final !== "") {
-      this.valueInput.final = "";
-      console.log("Update");
-    }
+    //Função para apagar o campo Resultado ao iniciar o Valor Base
+    (() => {
+      let valorInical = this.valueInput.inicial;
+      if (valorInical.length === 1 && this.valueInput.final !== "") {
+        this.valueInput.final = "";
+      }
+    })();
   }
 };
 </script>
