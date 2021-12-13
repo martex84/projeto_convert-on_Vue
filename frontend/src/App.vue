@@ -30,7 +30,10 @@
 import Login from "./components/Login/Login.vue";
 import Table from "./components/Table/Table.vue";
 import { apiBanco } from "./services/api.js";
-import { verificarLocalStorage } from "./services/funcoesLocalStorage.js";
+import {
+  verificarLocalStorage,
+  criarLocalStorage
+} from "./services/funcoesLocalStorage.js";
 
 let nomeLocalStorage = "convert-on";
 
@@ -83,13 +86,8 @@ export default {
         //Caso o token esteja errado irá zerar os valores do LocalStorage
         else {
           this.style.propsContainer = "grid";
-          localStorage.setItem(
-            nomeLocalStorage,
-            JSON.stringify({
-              token: "",
-              tabela: ""
-            })
-          );
+
+          criarLocalStorage(this.nomeLocalStorage);
         }
       })();
     })();
