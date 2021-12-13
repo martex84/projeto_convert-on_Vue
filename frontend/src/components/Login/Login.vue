@@ -40,6 +40,26 @@
         </div>
       </div>
     </div>
+    <div class="modal" tabindex="-1" v-bind:style="{display: style.modelLoginBancoDados}">
+      <div class="modal-dialog modal-dialog-centered position-relative">
+        <div class="modal-content">
+          <div class="containerModal__body modal-body">
+            <div class="d-flex flex-row-reverse">
+              <button
+                type="button"
+                class="btn-close position-absolute"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+                @click="fecharMessage"
+              ></button>
+            </div>
+            <div>
+              <h4 class="h4 text-center">{{bodyMensagem}}</h4>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -56,6 +76,7 @@ export default {
   data() {
     return {
       style: {
+        modelLoginBancoDados: "none",
         span: {
           displayLogin: "none",
           displaySenha: "none"
@@ -64,7 +85,8 @@ export default {
       input: {
         valorLogin: "",
         valorSenha: ""
-      }
+      },
+      bodyMensagem: "Conexão efetuada com sucesso!"
     };
   },
   methods: {
@@ -122,12 +144,16 @@ export default {
               .get(
                 `/user?login=${this.input.valorLogin}&senha=${this.input.valorSenha}`
               )
-              .catch(err => console.log(err));
+              .catch(err => {
+                this.bodyMensagem = `Erro ${err}`;
+
+                this.style.modelLoginBancoDados = "block";
+              });
 
             if (resultadoPesquisaUsuario.data.error !== undefined) {
-              console.log(
-                `Erro ${resultadoPesquisaUsuario.data.error} \nUsuário ou senha inválida!`
-              );
+              this.bodyMensagem = `Erro ${resultadoPesquisaUsuario.data.error} -- Usuário ou senha inválida!`;
+
+              this.style.modelLoginBancoDados = "block";
             } else if (resultadoPesquisaUsuario.data.token !== undefined) {
               valorLocalStorage.token = resultadoPesquisaUsuario.data.token;
 
@@ -136,13 +162,20 @@ export default {
                 JSON.stringify(valorLocalStorage)
               );
 
-              this.propsContainer = "none";
+              this.style.modelLoginBancoDados = "block";
             }
           })();
         }
       } else {
         this.style.span.displayLogin = "inline";
       }
+    },
+    fecharMessage() {
+      this.style.modelLoginBancoDados = "none";
+
+      this.bodyMensagem = "Conexão efetuada com sucesso!";
+
+      this.propsContainer = "none";
     }
   }
 };

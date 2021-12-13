@@ -61,7 +61,7 @@
           />
         </div>
       </div>
-      <div class="containerConteudo__containerTabela d-flex align-items-center flex-column ms-auto">
+      <div class="containerConteudo__containerTabela d-flex align-items-center flex-column">
         <h3 class="h3">Histórico de Conversões</h3>
         <table class="table">
           <thead>
@@ -142,6 +142,34 @@
         </nav>
       </div>
     </div>
+    <div class="modal" tabindex="-1" v-bind:style="{display: style.mensagem}">
+      <div class="modal-dialog modal-dialog-centered position-relative">
+        <div class="modal-content">
+          <div class="containerModal__body--table modal-body">
+            <div class="d-flex flex-row-reverse">
+              <button
+                type="button"
+                class="containerModal__ButtonClose--table btn-close position-absolute"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+                @click="fecharMessage"
+              ></button>
+            </div>
+            <div>
+              <h4 class="h4 text-center">{{bodyMensagem}}</h4>
+            </div>
+            <div class="containerModal__containerButtonClear--table d-flex justify-content-center">
+              <button
+                type="button"
+                class="btn btn-info"
+                data-bs-dismiss="modal"
+                @click="limparHistorico"
+              >Limpar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -168,8 +196,11 @@ export default {
         span: {
           valorbase: "none",
           conversao: "none"
-        }
+        },
+        mensagem: "none"
       },
+      bodyMensagem:
+        "O limite atual para o histórico foi alcançado, clique no botão limpar para recomeçar!",
       paginacao: {
         atual: 0,
         class: {
@@ -250,8 +281,8 @@ export default {
           valorLocalStorage.conversor === "" ||
           valorLocalStorage.conversor.hours !== horaAtual
         ) {
-          /* let tiposParaConversão = ["BRL", "USD", "CAD"];
-          let keyAPI = "8b14f3253aa22050e84a0dfd5e2effb6"; */
+          let tiposParaConversão = ["BRL", "USD", "CAD"];
+          let keyAPI = "8b14f3253aa22050e84a0dfd5e2effb6";
 
           valorLocalStorage.conversor = {
             hours: horaAtual,
@@ -262,7 +293,7 @@ export default {
             }
           };
 
-          /* await fetch(
+          await fetch(
             `http://api.exchangeratesapi.io/v1/latest?access_key=${keyAPI}&symbols=${tiposParaConversão[0]},${tiposParaConversão[1]},${tiposParaConversão[2]}`
           )
             .then(res => res.json())
@@ -284,7 +315,7 @@ export default {
                 this.nomeLocalStorage,
                 JSON.stringify(valorLocalStorage)
               );
-            });*/
+            });
         }
 
         //Ira processar os valores e decidir qual a ordem correta
@@ -421,7 +452,7 @@ export default {
                       indexGrupoPrincipal === 2 &&
                       indexGrupoSecundario === 4
                     ) {
-                      alert("O histórico está completo");
+                      this.style.mensagem = "block";
                     }
                   }
                 }
@@ -454,8 +485,40 @@ export default {
       }
       /* console.log(pagina); */
     },
-    consoleLocal() {
-      console.log();
+    fecharMessage() {
+      this.style.mensagem = "none";
+    },
+    limparHistorico() {
+      this.valueTable = {
+        pages: "1",
+        matrix: [
+          [
+            ["", "", ""],
+            ["", "", ""],
+            ["", "", ""],
+            ["", "", ""],
+            ["", "", ""]
+          ]
+        ]
+      };
+
+      this.paginacao = {
+        atual: 0,
+        class: {
+          campo1: {
+            geral: "containerTabela__paginacao--ativo",
+            statusAtual: "containerTabela__paginacao--backgoundPaginacaoAtual"
+          },
+          campo2: {
+            geral: "containerTabela__paginacao--desativo",
+            statusAtual: "containerTabela__paginacao--backgoundPaginacaoEspera"
+          },
+          campo3: {
+            geral: "containerTabela__paginacao--desativo",
+            statusAtual: "containerTabela__paginacao--backgoundPaginacaoEspera"
+          }
+        }
+      };
     }
   },
   beforeUpdate() {

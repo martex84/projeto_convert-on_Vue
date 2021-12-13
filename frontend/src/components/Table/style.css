@@ -9,6 +9,7 @@
     width: 450px;
     height: 410px;
     padding: 40px;
+    margin-left: auto;
 
     background-color: #37AFC8;
 }
@@ -68,4 +69,31 @@
 .containerTabela__paginacao--backgoundPaginacaoEspera {
     background-color: #fff !important;
     border-color: #dee2e6 !important;
+}
+
+.containerModal__body--table {
+    border: 2px solid black;
+    background-color: #37afc8;
+    color: #fff;
+}
+
+.containerModal__ButtonClose--table {
+    top: 3px;
+    right: 5px;
+}
+
+.containerModal__containerButtonClear--table {
+    margin-top: 20px !important;
+}
+
+@media screen and (max-width:990px) {
+
+    .containerTable {
+        margin-bottom: 16px;
+    }
+
+    .containerConteudo__containerTabela,
+    .containerConteudo__containerConverter {
+        margin: auto !important;
+    }
 }
