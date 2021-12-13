@@ -4,7 +4,7 @@
  
 </br></br>
 ## **Tecnologias Utilizadas** 🦾
-- Vue;
+- VueJs;
 - Bootstrap;
 - Axios;
 - Express;
@@ -12,6 +12,7 @@
 - JsonWebToken;
 - Mysql;
 - NodeJs;
+- Docker;
  
 </br></br>
 ## **Inicialização** 💥
