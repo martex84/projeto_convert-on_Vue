@@ -1,6 +1,6 @@
 # **Projeto Conversor On.**
  
-### O projeto tem como finalidade a criação de um sistema incorporado a um login por meio do banco de dados e um processo de cálculo automático entre moedas mundiais, de forma que os valores de conversão irão ser salvos do local storage, mas atualizando a cada 1 hora;
+### O projeto tem como finalidade a criação de um sistema incorporado a um login por meio do banco de dados e um processo de cálculo automático entre moedas mundiais, utilizando para isso a api do site Exchangerate, de forma que os valores de conversão irão ser salvos no local storage, mas atualizandos a cada 1 hora;
  
 </br></br>
 ## **Tecnologias Utilizadas** 🦾
@@ -18,22 +18,22 @@
 ## **Inicialização** 💥
 - Realize a clonagem do sistema pelo github;
 - Vá na pasta criada e pelo terminal entre na pasta **backend**;
-- Crie um servidor Mysql com as seguinte caracteristicas:
-  
+- Crie um servidor Mysql com as seguinte características:
 >   User: 'root'; <br>
 >   Password: 'root'; <br>
 >   Host: '172.17.0.2' <br>
 >   Port: 3306
  
 - Caso seja necessário, é possível trocar essa características de conexão no arquivo **"backend/src/database/index.js"**
-- Execute o comando a seguir
-> yarn add</br>
-- Execute o comando a seguir para criar o banco de dados localmente
+- Execute o comando a seguir na pasta **backend**;
+> yarn install</br>
+- Execute o comando a seguir na pasta **backend** para criar o banco de dados localmente;
 > yarn sequelize db:create</br>
-- Execute o comando a seguir para inicializar o servidor backend
+- Execute o comando a seguir para inicializar o servidor backend;
 > yarn serve</br>
 - Volte a pasta raiz e entre na pasta **frontend**;
-- Execute o comando a seguir para inicializar o Vue;
+- Execute os comandos a seguir para inicializar o Vue;
+> yarn install</br>
 > yarn server</br>
 - Entre no link do server disponibilizado no console;
 - Utilize as seguintes informações para logar no sistema web:
